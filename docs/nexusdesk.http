@@ -1,0 +1,39 @@
+@baseUrl = http://localhost:8088/api
+@token = COLE_O_TOKEN_AQUI
+
+### Login como agente
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "agent@nexusdesk.dev",
+  "password": "Agent@123"
+}
+
+### Sessão atual
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### Dashboard
+GET {{baseUrl}}/dashboard
+Authorization: Bearer {{token}}
+
+### Categorias
+GET {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+
+### Chamados
+GET {{baseUrl}}/tickets?page=0&size=12
+Authorization: Bearer {{token}}
+
+### Criar chamado
+POST {{baseUrl}}/tickets
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Falha de acesso à VPN",
+  "description": "Não consigo autenticar na VPN após a troca da senha corporativa.",
+  "priority": "HIGH",
+  "categoryId": 1
+}

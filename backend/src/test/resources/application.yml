@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:nexusdesk;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+app:
+  security:
+    jwt-secret: test-secret-with-at-least-thirty-two-characters-123
+    jwt-ttl-minutes: 60
+  cors:
+    allowed-origins: http://localhost:5173

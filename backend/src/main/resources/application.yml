@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: nexusdesk-api
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/nexusdesk}
+    username: ${DB_USER:nexusdesk}
+    password: ${DB_PASSWORD:nexusdesk}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_batch_fetch_size: 50
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+app:
+  seed-demo: ${SEED_DEMO:false}
+  security:
+    jwt-secret: ${JWT_SECRET:change-this-demo-secret-to-at-least-32-characters}
+    jwt-ttl-minutes: ${JWT_TTL_MINUTES:480}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:8088}
