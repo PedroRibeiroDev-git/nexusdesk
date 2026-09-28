@@ -1,30 +1,24 @@
 # NexusDesk
 
-**NexusDesk** é uma aplicação full stack de Service Desk / Help Desk criada para demonstrar uma arquitetura próxima de um produto real: autenticação, autorização por papéis, API REST, banco relacional, auditoria, filtros, paginação, dashboard, administração de usuários e ambiente reproduzível com Docker.
+NexusDesk é uma aplicação full stack de Service Desk / Help Desk desenvolvida como projeto de portfólio.
 
-O objetivo do projeto é ir além de um CRUD simples e mostrar decisões que aparecem em sistemas corporativos de suporte técnico.
+O sistema permite criar e acompanhar chamados de suporte, gerenciar usuários e controlar diferentes níveis de acesso através dos perfis Cliente, Agente e Administrador.
 
-> **Status:** versão `1.0.0` validada localmente com Docker Desktop no Windows, incluindo autenticação, RBAC, dashboards, chamados, notas internas, administração de usuários e isolamento de dados por perfil. Consulte [`docs/VALIDATION.md`](docs/VALIDATION.md).
+O projeto foi desenvolvido utilizando Java com Spring Boot no backend, React com TypeScript no frontend e PostgreSQL como banco de dados.
 
 ## Principais recursos
 
-- autenticação stateless com JWT e senhas protegidas com BCrypt;
-- controle de acesso por perfil: **Cliente**, **Agente** e **Administrador**;
+- login com autenticação JWT;
+- perfis de Cliente, Agente e Administrador;
 - criação e acompanhamento de chamados;
-- prioridades, categorias e ciclo de status;
+- alteração de status e prioridade;
 - atribuição de chamados para agentes;
-- comentários públicos e notas internas;
-- histórico/auditoria de alterações do chamado;
-- proteção de notas internas também no backend;
-- busca, filtros e paginação server-side;
-- dashboard com indicadores e chamados recentes;
+- comentários e notas internas;
+- dashboard com informações dos chamados;
 - gerenciamento de usuários pelo administrador;
-- validação de entrada e tratamento centralizado de erros;
-- optimistic locking nos chamados para reduzir conflitos de edição concorrente;
-- migrations de banco com Flyway;
-- dados iniciais para demonstração;
-- health checks e orquestração com Docker Compose;
-- workflow de CI para backend e frontend.
+- filtros e busca de chamados;
+- banco PostgreSQL;
+- execução com Docker Compose.
 
 ## Stack
 
@@ -275,11 +269,12 @@ http://localhost:8088/actuator/health
 
 A checklist da validação manual está em [`docs/VALIDATION.md`](docs/VALIDATION.md).
 
+
 ## API
 
-A API fica sob `/api` e exige `Authorization: Bearer <token>` exceto no login.
+O backend disponibiliza uma API REST utilizada pelo frontend.
 
-Os principais endpoints estão documentados em [`docs/API.md`](docs/API.md). Também há um arquivo [`docs/nexusdesk.http`](docs/nexusdesk.http) para clientes REST compatíveis.
+Os principais endpoints estão documentados em [`docs/API.md`](docs/API.md).
 
 ## Estrutura do repositório
 
@@ -314,38 +309,14 @@ NexusDesk/
 └── README.md
 ```
 
-## Decisões técnicas que valem discutir em entrevista
 
-**RBAC em duas camadas.** A interface adapta a experiência conforme o perfil, mas toda regra importante é novamente validada na API.
 
-**JWT stateless.** Simplifica a API e demonstra integração com Spring Security. Para um produto público de maior risco, vale evoluir para access token curto + refresh token em cookie `HttpOnly` e uma política de revogação.
 
-**Flyway + `ddl-auto: validate`.** O schema é versionado explicitamente. O Hibernate valida o mapeamento em vez de alterar o banco silenciosamente.
-
-**Optimistic locking.** A coluna `version` reduz a chance de um agente sobrescrever silenciosamente a alteração feita por outro.
-
-**Notas internas.** A restrição não é apenas visual: clientes não podem criá-las e a API remove comentários/eventos internos das respostas destinadas a clientes.
-
-**DTOs.** Entidades JPA não são expostas diretamente pela API, evitando acoplamento e vazamento acidental de campos como `passwordHash`.
-
-## Antes de publicar na internet
-
-Este repositório foi preparado como demonstração/portfólio. Para produção real, entre outras medidas, seria necessário:
-
-- substituir todas as credenciais de demonstração;
-- armazenar segredos em um secret manager;
-- adotar estratégia de refresh/revogação de tokens;
-- configurar HTTPS, headers de segurança e rate limiting;
-- usar observabilidade centralizada;
-- configurar backups e política de retenção do PostgreSQL;
-- aumentar cobertura de testes unitários, integração e E2E;
-- integrar e-mail/SSO se fizer parte do contexto do produto.
 
 ## Versão e histórico
 
-Consulte [`CHANGELOG.md`](CHANGELOG.md) para o resumo da versão de portfólio.
+Consulte [`CHANGELOG.md`](CHANGELOG.md) para o histórico de versões do projeto.
 
-Para publicar o repositório, siga [`docs/GITHUB_PUBLISH.md`](docs/GITHUB_PUBLISH.md).
 
 ## Licença
 
